@@ -1,0 +1,102 @@
+--------------------- VHDL Code for the FSM (the brain of the machine) ---------------------
+
+---------------------Begin VHDL Code for Synchronous FSM---------------------
+Synchronous_process: process (clk,CS)
+begin
+	if clk'event and clk = '1' then
+		CS<= NS;
+	else 
+		CS<= CS;
+	end if;
+end process;		
+---------------------End VHDL Code for Synchronous FSM---------------------
+
+---------------------Begin NextState Logic VHDL Code FSM---------------------	
+NextState_logic: process (CS,rx,cmp7_s,cmp15_s, cmp7_n)
+begin
+	case CS is
+		when idle =>
+			if rx = '0' then
+				NS<= start;
+			else	
+				NS<=idle;
+			end if;
+					
+		when start =>
+			if cmp7_s = '0' and rx = '1' then 
+				NS<=idle;
+			elsif cmp7_s = '0' then
+				NS<=start;
+			else
+				NS<= data;
+			end if;
+				
+		when data =>
+			if (cmp15_s = '1' and cmp7_n = '1') then
+				NS<= stop;
+			else
+				NS<=data;
+			end if;
+			
+		when stop =>
+			if cmp15_s = '0' then
+				NS<=stop;
+			else
+				NS<=idle;
+			end if;			
+	end case;
+end process;
+---------------------End NextState Logic VHDL Code FSM---------------------
+			
+---------------------Begin Output_logic VHDL Code FSM---------------------
+Output_logic: process (CS,rx,cmp7_s,cmp15_s, cmp7_n)
+begin 
+	enable_S <= '0';
+	reset_S <= '0';
+	enable_Sh <= '0';
+	reset_n <= '0';
+	enable_n <= '0';
+	store_data <= '0';
+	
+	case CS is
+		when idle =>
+		--led <= 
+			if rx = '0' then
+				reset_S <= '1';
+			else
+				reset_S <= '0';
+			end if;
+			
+		when start =>
+			if cmp7_s = '0' then
+				enable_S <= '1';
+			else
+				reset_S <= '1';
+				reset_n <= '1';
+			end if;
+				
+		when data =>
+			if (cmp15_s = '1' and cmp7_n = '1') then
+				reset_S <= '1';
+				enable_Sh <= '1';
+			elsif (cmp15_s = '1' and cmp7_n = '0') then
+				reset_S <= '1';
+				enable_Sh <= '1';
+				enable_n <= '1';
+			else
+				enable_s <= '1';
+			end if;
+			
+			
+		when stop =>
+			if cmp15_s = '0' then
+				enable_S <= '1';
+				--store_data <= '1';
+			else
+				enable_S <= '0';
+				--store_data <= '1';
+			end if;
+				store_data <= '1'; --maybe here or up in else.
+	end case;
+end process;
+---------------------End Output_logic VHDL Code FSM---------------------

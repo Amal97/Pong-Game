@@ -1,0 +1,16 @@
+Fitter Status : Successful - Wed May 23 20:49:40 2018
+Quartus II 64-Bit Version : 13.0.0 Build 156 04/24/2013 SJ Web Edition
+Revision Name : mini_project
+Top-level Entity Name : ball_display
+Family : Cyclone III
+Device : EP3C16F484C6
+Timing Models : Final
+Total logic elements : 1,255 / 15,408 ( 8 % )
+    Total combinational functions : 1,146 / 15,408 ( 7 % )
+    Dedicated logic registers : 412 / 15,408 ( 3 % )
+Total registers : 412
+Total pins : 29 / 347 ( 8 % )
+Total virtual pins : 0
+Total memory bits : 12,288 / 516,096 ( 2 % )
+Embedded Multiplier 9-bit elements : 12 / 112 ( 11 % )
+Total PLLs : 1 / 4 ( 25 % )
